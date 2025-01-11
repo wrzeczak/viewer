@@ -1,0 +1,2 @@
+flag.bmp
+logo.bmp
