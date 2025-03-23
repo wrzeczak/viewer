@@ -22,7 +22,7 @@ Open `example.html` to see the final product of the system. The process began wi
 
 ### Tagger Usage
 
-Run the tagger on a folder full of images. The system will create/read any files with the `.tag` extension. It supports 20 tags in one folder (this would be pretty easy to extend) and will bind the right-hand side of the keyboard. Press on a key to toggle a tag on a given image (clicking the buttons doesn't actually work; this is meant to be as mouse-free as possible). Press `n` to create a new tag, and use the left and right arrow keys to cycle through the folder. Hit `ESC` to exit (prompts you with a menu), or `SHIFT + ESC` to exit and save (no prompt). Running `tagger.py` with the `-d` option will print debug information - this is really only meant for development and can be safely ignored by users. Passing `-e` will exclude all images that already have tags **(this feature has not been fully tested yet)**.
+Run the tagger on a folder full of images. The system will create/read any files with the `.tag` extension. It supports 20 tags in one folder (this would be pretty easy to extend) and will bind the right-hand side of the keyboard. Press on a key to toggle a tag on a given image (clicking the buttons doesn't actually work; this is meant to be as mouse-free as possible). Press `n` to create a new tag, and use the left and right arrow keys to cycle through the folder. Hit `ESC` to exit (prompts you with a menu), or `SHIFT + ESC` to exit and save (no prompt). Running `tagger.py` with the `-d` option will print debug information - this is really only meant for development and can be safely ignored by users. Passing `-e` will exclude all images that already have tags.
 
 ---
 
