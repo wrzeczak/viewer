@@ -43,12 +43,16 @@ if exclude_tagged_files:
     tagged_files = []
 
     for _t in tag_files:
-        with open(_t, "r", encoding="utf", errors="ignore") as t:
+        with open(join(source_folder, _t), "r", encoding="utf", errors="ignore") as t:
             lines = t.readlines()
             for l in lines:
                 tagged_files.append(l.strip())
 
     filenames = [f for f in filenames if f not in tagged_files]
+
+    if len(filenames) == 0:
+        print(f"WRZ: ERROR: Flag -e was passed, but there are no untagged files in \"{source_folder}!\"\nWRZ: Exiting, no harm done.")
+        exit(1)
 
 filenames_full = [join(source_folder, f) for f in filenames]
 
@@ -339,7 +343,10 @@ if save_changes:
 
     for t in tags:
         debug_print(f"Writing {len(new_tag_dict[t])} files to {t}.tag...")
-        with open(f"{source_folder}\\{t}.tag", "w") as f:
-            f.writelines(new_tag_dict[t])
 
-        
+        if not exclude_tagged_files: # open with "w"
+            with open(f"{source_folder}\\{t}.tag", "w") as f:
+                f.writelines(new_tag_dict[t])
+        else:
+            with open(f"{source_folder}\\{t}.tag", "a") as f:
+                f.writelines(new_tag_dict[t])
