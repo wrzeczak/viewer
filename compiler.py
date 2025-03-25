@@ -30,6 +30,7 @@ output_file = args.output_file.name
 
 ##-----------------------------------------------------------------------------
 
+#TODO: make this gen_n_columns(files, n)
 def gen_four_columns(files):
     left_pics = files[:len(files)//2]
     right_pics = files[len(files)//2:]
@@ -45,10 +46,11 @@ def gen_four_columns(files):
 
 ##-----------------------------------------------------------------------------
 
+# compress files if -c flag is passed
 if convert == True:
-    if os.path.isdir(f"{mypath}-compressed/"):
+    if os.path.isdir(f"{mypath}-compressed/"): # remove all previously compressed files (easier than checking which ones are already)
         subprocess.call(["rm", "-rf", f"{mypath}-compressed"])
-    subprocess.call(["python3", "cruncher.py", mypath])
+    subprocess.call(["python3", "cruncher.py", mypath]) # call the compressor script TODO: make this an imported module?
     files = [f for f in listdir(f"{mypath}-compressed") if isfile(join(f"{mypath}-compressed", f))]
 else:
     files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -57,10 +59,11 @@ files = [f for f in files if not f.endswith(".tag") and f != "TAGSET" and not f.
 
 ##-----------------------------------------------------------------------------
 
+# TODO: detect this automatically - is it useful to ignore tags in a tagged setup?
 if is_tagged == True:
     tag_files = []
 
-    for f in listdir(mypath):
+    for f in listdir(mypath): # get all the tag files
         if isfile(f"{mypath}/{f}") and f.endswith(".tag"):
             tag_files.append(f)
 
@@ -72,7 +75,7 @@ if is_tagged == True:
                 images = f.readlines()
                 images = [i.strip() for i in images]
                 print(f"Writing {t[:-4]}.html, {len(images)} files.")
-                image_columns = gen_four_columns(images)
+                image_columns = gen_four_columns(images) # TODO: replace this with gen_n_columns()
                 
                 print("<!DOCTYPE html>", file=h)
                 print("<html lang=\"en\"><head>", file=h)
@@ -96,7 +99,7 @@ if is_tagged == True:
 
 ##-----------------------------------------------------------------------------
 
-columns = gen_four_columns(files)
+columns = gen_four_columns(files) # TODO: replace this gen_n_columns
 
 ##-----------------------------------------------------------------------------
 

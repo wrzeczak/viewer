@@ -16,7 +16,7 @@ Open `example.html` to see the final product of the system. The process began wi
 
 `folder_path` is the folder containing all the images; `output_file` is the root HTML file that is created.
 
-`-c` will create a compressed version of the folder; this is intended to save bandwidth if you are displaying high-resolution images. The compressed images are displayed on the root pages[^3], and when the images are clicked, the full-resolution image is loaded.
+`-c` will create a compressed version of the folder; this is intended to save bandwidth if you are displaying high-resolution images. The compressed images are displayed on the root pages[^3], and when the images are clicked, the full-resolution image is loaded. **This only works on Linux using imagemagick**. (The idea being that your web server is probably running Linux, and you only need to store compressed files on the web server)
 
 `-t` will indicate to the compiler that the tag pages should be compiled. The program will not automatically do this.
 
