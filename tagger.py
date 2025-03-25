@@ -112,7 +112,12 @@ for t in tags:
 
 button_labels = _button_labels[:i]
 
+button_column_count = len(button_labels) % 5 # width of the last column of buttons
+button_row_count = 1 + floor((len(button_labels) - button_column_count) / 4)
+
 debug_print(button_dict)
+debug_print(button_row_count)
+debug_print(button_column_count)
 
 #------------------------------------------------------------------------------
 
@@ -130,13 +135,13 @@ SetWindowSize(WIDTH, HEIGHT)
 SetWindowPosition(floor(WIDTH / 2), floor(HEIGHT / 2))
 
 IMAGE_HEIGHT = floor(0.7 * HEIGHT)
-LABEL_HEIGHT = 45
+LABEL_HEIGHT = 40
 UI_HEIGHT = HEIGHT - IMAGE_HEIGHT - LABEL_HEIGHT
 
-BUTTON_HEIGHT = floor(UI_HEIGHT / 7)
+BUTTON_HEIGHT = floor(UI_HEIGHT / (2 + button_row_count))
 BUTTON_WIDTH = floor(WIDTH / 6)
 BUTTON_X_OFFSET = floor(BUTTON_WIDTH / 2)
-BUTTON_Y_OFFSET = BUTTON_HEIGHT + IMAGE_HEIGHT + LABEL_HEIGHT
+BUTTON_Y_OFFSET = LABEL_HEIGHT + IMAGE_HEIGHT + floor((UI_HEIGHT - (BUTTON_HEIGHT * button_row_count)) / 2)
 
 SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()))
 
@@ -146,8 +151,6 @@ save_changes = True
 
 new_tag_dialog = False
 text_input = ffi.new("char*", b"\0")
-
-background_texture = LoadTexture(b"background.png")
 
 #------------------------------------------------------------------------------
 
@@ -171,6 +174,8 @@ while not WindowShouldClose():
     #------------------------------------------------------------------------------
     
     reload_picture = False
+
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 20)
 
     if IsKeyPressed(KEY_RIGHT) and not exit_dialog:
         reload_picture = True
@@ -227,17 +232,13 @@ while not WindowShouldClose():
                 image_tags.append(tag)
                 debug_print(f"{image} - {image_tags}")
 
-
     #------------------------------------------------------------------------------
     
     BeginDrawing()
 
     ClearBackground(BLACK)
 
-    # DrawTexturePro(background_texture, [0, 0, background_texture.width, background_texture.height], [0, 0, WIDTH, HEIGHT], [0, 0], 0.0, WHITE)
-
     DrawRectangle(0, IMAGE_HEIGHT + LABEL_HEIGHT, WIDTH, UI_HEIGHT, DARKGRAY)
-    # DrawRectangle(0, IMAGE_HEIGHT, WIDTH, LABEL_HEIGHT, WHITE)
 
     DrawText(str.encode(str(image_tags)), 10, IMAGE_HEIGHT + 8, 30, WHITE)
 
@@ -259,15 +260,19 @@ while not WindowShouldClose():
         DrawText(m1, floor((WIDTH - w1) / 2), floor((IMAGE_HEIGHT / 2) - font_size), font_size, WHITE)
         DrawText(m2, floor((WIDTH - w2) / 2), floor(IMAGE_HEIGHT / 2), font_size, WHITE)
 
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 20)
+
     i = 0
+
     for l in button_labels:
         x = i % 5
-        y = (i - x) / 4
+        y = floor((i - x) / 4)
 
         GuiButton([(x * BUTTON_WIDTH) + BUTTON_X_OFFSET, (y * BUTTON_HEIGHT) + BUTTON_Y_OFFSET, BUTTON_WIDTH, BUTTON_HEIGHT ], str.encode(f"{l} - {button_dict[l]}"))
-
         i += 1
-    
+
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 20)
+
     if exit_dialog:
         DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(WHITE, 0.7))
         exit_dialog_result = GuiMessageBox([floor(WIDTH / 4), floor(HEIGHT / 4), floor(WIDTH / 2), floor(HEIGHT / 2)], GuiIconText(ICON_EXIT, str.encode("Close Window")), str.encode("Do you want to exit and save changes?"), str.encode("Exit With Changes;Exit Without Saving;Cancel"))
@@ -315,7 +320,6 @@ while not WindowShouldClose():
             new_tag_dialog = False
             text_input = ffi.new("char*", b"\0")
 
-
     EndDrawing()
 
 #------------------------------------------------------------------------------
@@ -333,7 +337,7 @@ if save_changes:
 
     for n in filenames:
         s = image_dict[n]
-        # debug_print(f"File {n} is tagged with {s}")
+
         for t in tags:
             if t in s:
                 new_tag_dict[t].append(f"{n}\n")    
