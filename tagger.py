@@ -1,13 +1,13 @@
 from raylib import *
-import sys
-import os
+# import sys
+# import os
 from os import listdir
 from os.path import isfile, join
 from typing import List
 import argparse
 from time import perf_counter
 from math import floor
-import ctypes
+# import ctypes
 
 #------------------------------------------------------------------------------
 
@@ -126,7 +126,10 @@ HEIGHT = 1
 IMAGE_HEIGHT = 1
 UI_HEIGHT = 1
 
+if not print_debug_information: SetTraceLogLevel(LOG_FATAL)
+
 InitWindow(810, 650, b"WRZ: Image Tagger")
+
 
 WIDTH = floor(GetMonitorWidth(GetCurrentMonitor()) / 2)
 HEIGHT = floor(GetMonitorHeight(GetCurrentMonitor()) / 2)
