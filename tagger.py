@@ -274,7 +274,7 @@ while not WindowShouldClose():
         GuiButton([(x * BUTTON_WIDTH) + BUTTON_X_OFFSET, (y * BUTTON_HEIGHT) + BUTTON_Y_OFFSET, BUTTON_WIDTH, BUTTON_HEIGHT ], str.encode(f"{l} - {button_dict[l]}"))
         i += 1
 
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 20)
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 14)
 
     if exit_dialog:
         DrawRectangle(0, 0, WIDTH, HEIGHT, Fade(WHITE, 0.7))
@@ -318,7 +318,28 @@ while not WindowShouldClose():
                 debug_print(tags)
                 debug_print(tag_files)
 
-            exit(2)
+                _button_labels = list("12345QWERTASDFGZXCVB")
+
+                button_dict = {}
+
+                if len(tags) > len(_button_labels):
+                    print("Too many tags! Fix this! Email me! wrzeczak@protonmail.com")
+                    exit(1)
+
+                i = 0
+                for t in tags:
+                    button_dict[_button_labels[i]] = t
+                    i += 1
+
+                button_labels = _button_labels[:i]
+
+                button_column_count = len(button_labels) % 5 # width of the last column of buttons
+                button_row_count = 1 + floor((len(button_labels) - button_column_count) / 4)
+
+                debug_print(button_dict)
+                debug_print(button_row_count)
+                debug_print(button_column_count)
+            # exit(2)
         elif result == 0 or result == 2:
             new_tag_dialog = False
             text_input = ffi.new("char*", b"\0")
