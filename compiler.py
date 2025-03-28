@@ -7,6 +7,8 @@ import sys
 
 import argparse
 
+from math import floor
+
 ##-----------------------------------------------------------------------------
 
 mypath = "ERRNO"
@@ -20,6 +22,7 @@ parser.add_argument("folder_name")
 parser.add_argument("-o", "--output_file", nargs='?', type=argparse.FileType('w'))
 parser.add_argument("-c", "--compress", action="store_true")
 parser.add_argument("-t", "--tagged", action="store_true")
+parser.add_argument("-n", "--number_of_columns", type=int, default=4)
 
 args = parser.parse_args()
 
@@ -27,6 +30,7 @@ mypath = args.folder_name
 convert = args.compress
 is_tagged = args.tagged
 output_file = args.output_file.name
+column_count = args.number_of_columns
 
 ##-----------------------------------------------------------------------------
 
@@ -43,6 +47,13 @@ def gen_four_columns(files):
 
     # q2 and q4 tend to accumulate the most images, so put them in the middle
     return [ q1, q2, q4, q3 ]
+
+def gen_n_columns(files, n):
+    output = [[] for _ in range(n)]
+    for i in range(len(files)):
+        output[i % n].append(files[i])
+    
+    return output
 
 ##-----------------------------------------------------------------------------
 
@@ -75,8 +86,9 @@ if is_tagged == True:
                 images = f.readlines()
                 images = [i.strip() for i in images]
                 print(f"Writing {t[:-4]}.html, {len(images)} files.")
-                image_columns = gen_four_columns(images) # TODO: replace this with gen_n_columns()
-                
+                # image_columns = gen_four_columns(images) # TODO: replace this with gen_n_columns()
+                image_columns = gen_n_columns(images, column_count)
+
                 print("<!DOCTYPE html>", file=h)
                 print("<html lang=\"en\"><head>", file=h)
                 print("<link rel=\"stylesheet\" href=\"../styles.css\">", file=h)    
@@ -99,7 +111,8 @@ if is_tagged == True:
 
 ##-----------------------------------------------------------------------------
 
-columns = gen_four_columns(files) # TODO: replace this gen_n_columns
+# columns = gen_four_columns(files) # TODO: replace this gen_n_columns
+columns = gen_n_columns(files, column_count)
 
 ##-----------------------------------------------------------------------------
 
@@ -143,3 +156,16 @@ with open(output_file, "w") as o:
     print("</div>", file=o)
     print("</p>", file=o)
     print("</body></html>", file=o)
+
+#------------------------------------------------------------------------------
+
+print("\n-----------------------------------------------\n")
+print("Copy and paste the CSS code below into your site's CSS file; #gallery-column needs to be redefined to have a certain width!\n")
+print("#gallery-column {")
+
+width_percent = floor((1 / column_count) * 100)
+
+print(f"\tflex: {width_percent}%;")
+print(f"\twidth: {width_percent}%;")
+print("\tpadding: 0 0px;\n}")
+print("\n-----------------------------------------------\n")
