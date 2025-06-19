@@ -2,30 +2,22 @@
 
 An image tagging system with the ability to generate a webpage for easy viewing online.
 
-### Example
+### Usage
 
-Open `example.html` to see the final product of the system. The process began with the folder `example/`, containing nine images. Then, `py tagger.py example` opened the tagger, a program which tags the files. After tagging the files, the program was exited (`ESC` or hitting the X). Then, `py compiler.py -o example.html -t example` compiled the webpage `example.html` and tag pages `dole.html`, `flag.html`, and `kemp.html`. The `-t` option tells the compiler that the folder is tagged, and is optional. The `-o` option is required and tells the program the output file[^2].
+Given a folder of photos, this system provides 1) `tagger.py`, a small GUI to easily tag photos, and 2) `compiler.py`, which takes a tagged photo folder (one with an appropriately formatted JSON store) and generates a root webpage, as well as an individual page for each tag, hyperlinked together.
 
-### Full CLI Featureset
+### Tagger
 
-`py tagger.py [-d] [-e] folder_path`
+The tagger is a visual program, designed around the keyboard and relatively customizable. Running `py tagger.py <path to source folder>` will open the program; running it with the `-d` flag will print debug information (not necessary for users, really more of a dev feature). This will automatically create a `store.json` in your source folder, which is where all the data are stored. Keybinds are easily changed by editing the appropriate `WK_` constant at the beginning of the file; I will reference them by their defaults and their signifier.
 
-`-e` will exclude any files with tags already attached to them. This is useful if you are adding a few files to a large dataset and want to avoid scrolling through files you don't intend to modify the tags of.
+	- Use the arrow keys (`WK_ADVANCE_IMAGES` and `WK_RETREAT_IMAGES`) to move between all the images in a folder.
+	- Use Space (`WK_MARK_DUPLICATE`) to mark the file as a duplicate, and Tab (`WK_MARK_MARKED`) to mark it otherwise (I use this generic mark to mark files for deletion).
+	- Use Enter (`WK_NEW_TAG`) to create a new tag (this will bring up a dialog box for you to enter the name), and Backspace (`WK_DEL_TAG`) to delete a tag (delete a tag by opening the deletion mode and pressing the tag's key).
+	- Tag a file by pressing the key to the left of the tag name; it will light up when the tag is applied, and darken when it is not. (`WK_TAG_KEYS` has a modifiable list of the 20 keys you can assign to this).
+	- Use Escape (`WK_QUIT`) to quit. Quitting automatically saves your changes and writes them to the JSON store.
 
-`py compiler.py [-o output_file] [-c] [-t] folder_path`
+Some minutia: the duplicate and marked files are saved as lists at the top of the JSON store. Bad files (files tagged with extensions Raylib supports but are not in the right format, and thus unopenable) are also marked in a list. Do with that information what you wish; the program will not touch or delete any files (it will remove any deleted files automatically from those lists). GIFs are openable, but will not play, only showing their first frame. Sometimes image loading can lag, but broadly I find it works rather smoothly even on large image sets.
 
-`folder_path` is the folder containing all the images; `output_file` is the root HTML file that is created.
+### Compiler
 
-`-c` will create a compressed version of the folder; this is intended to save bandwidth if you are displaying high-resolution images. The compressed images are displayed on the root pages[^3], and when the images are clicked, the full-resolution image is loaded. **This only works on Linux using imagemagick**. (The idea being that your web server is probably running Linux, and you only need to store compressed files on the web server)
-
-`-t` will indicate to the compiler that the tag pages should be compiled. The program will not automatically do this.
-
-### Tagger Usage
-
-Run the tagger on a folder full of images. The system will create/read any files with the `.tag` extension. It supports 20 tags in one folder (this would be pretty easy to extend) and will bind the right-hand side of the keyboard. Press on a key to toggle a tag on a given image (clicking the buttons doesn't actually work; this is meant to be as mouse-free as possible). Press `n` to create a new tag, and use the left and right arrow keys to cycle through the folder. Hit `ESC` to exit (prompts you with a menu), or `SHIFT + ESC` to exit and save (no prompt). Running `tagger.py` with the `-d` option will print debug information - this is really only meant for development and can be safely ignored by users. Passing `-e` will exclude all images that already have tags.
-
----
-
-[^2]: As of now, the output location of the tag files is not modifiable at runtime.
-
-[^3]: As of now, tag pages do not display the compressed files.
+The compiler is a CLI that takes a folder generated by the tagger (images + `store.json`) and produces a root webpage (the `output_file` argument) with all the images and child webpages for each of the individual tags. A basic format and `styles.css` are provided, but they're not hard to make look to your liking. There is also `cruncher.py`, which will automatically generate compressed versions of the images for thumbnails (clicking on an image will open it in full resolution in a new tab). **NOTE:** the cruncher uses ImageMagick, and won't work on Windows machines. This shouldn't be too hard to get around, as it would only take changing the command that's issued (swapping `convert` for something) to change this.
