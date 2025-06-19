@@ -146,6 +146,9 @@ if tagged:
 
 #------------------------------------------------------------------------------
 
+
+image_columns = gen_n_columns(images, column_count)
+
 with open(output_file_path, "w") as o:
 	def printf(s):
 		print(s, file=o)
