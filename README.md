@@ -10,11 +10,11 @@ Given a folder of photos, this system provides 1) `tagger.py`, a small GUI to ea
 
 The tagger is a visual program, designed around the keyboard and relatively customizable. Running `py tagger.py <path to source folder>` will open the program; running it with the `-d` flag will print debug information (not necessary for users, really more of a dev feature). This will automatically create a `store.json` in your source folder, which is where all the data are stored. Keybinds are easily changed by editing the appropriate `WK_` constant at the beginning of the file; I will reference them by their defaults and their signifier.
 
-	- Use the arrow keys (`WK_ADVANCE_IMAGES` and `WK_RETREAT_IMAGES`) to move between all the images in a folder.
-	- Use Space (`WK_MARK_DUPLICATE`) to mark the file as a duplicate, and Tab (`WK_MARK_MARKED`) to mark it otherwise (I use this generic mark to mark files for deletion).
-	- Use Enter (`WK_NEW_TAG`) to create a new tag (this will bring up a dialog box for you to enter the name), and Backspace (`WK_DEL_TAG`) to delete a tag (delete a tag by opening the deletion mode and pressing the tag's key).
-	- Tag a file by pressing the key to the left of the tag name; it will light up when the tag is applied, and darken when it is not. (`WK_TAG_KEYS` has a modifiable list of the 20 keys you can assign to this).
-	- Use Escape (`WK_QUIT`) to quit. Quitting automatically saves your changes and writes them to the JSON store.
+- Use the arrow keys (`WK_ADVANCE_IMAGES` and `WK_RETREAT_IMAGES`) to move between all the images in a folder.
+- Use Space (`WK_MARK_DUPLICATE`) to mark the file as a duplicate, and Tab (`WK_MARK_MARKED`) to mark it otherwise (I use this generic mark to mark files for deletion).
+- Use Enter (`WK_NEW_TAG`) to create a new tag (this will bring up a dialog box for you to enter the name), and Backspace (`WK_DEL_TAG`) to delete a tag (delete a tag by opening the deletion mode and pressing the tag's key).
+- Tag a file by pressing the key to the left of the tag name; it will light up when the tag is applied, and darken when it is not. (`WK_TAG_KEYS` has a modifiable list of the 20 keys you can assign to this).
+- Use Escape (`WK_QUIT`) to quit. Quitting automatically saves your changes and writes them to the JSON store.
 
 Some minutia: the duplicate and marked files are saved as lists at the top of the JSON store. Bad files (files tagged with extensions Raylib supports but are not in the right format, and thus unopenable) are also marked in a list. Do with that information what you wish; the program will not touch or delete any files (it will remove any deleted files automatically from those lists). GIFs are openable, but will not play, only showing their first frame. Sometimes image loading can lag, but broadly I find it works rather smoothly even on large image sets.
 
