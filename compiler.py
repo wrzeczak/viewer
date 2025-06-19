@@ -155,7 +155,7 @@ with open(output_file_path, "w") as o:
 
 	printf("<!DOCTYPE html>")
 	printf("<html lang=\"en\">\n<head>")
-	printf("<link rel=\"stylesheet\" href=\"../styles.css\">")    
+	printf("<link rel=\"stylesheet\" href=\"styles.css\">")    
 	printf(f"<title>Global Image View</title>")
 	printf("</head>")
 	printf("<body>")

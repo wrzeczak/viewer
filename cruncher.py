@@ -14,7 +14,7 @@ else: exit(-1)
 files = [f for f in listdir(root_folder) if isfile(join(root_folder, f))]
 
 os.mkdir(f"{root_folder}-compressed")
-ACCEPTED_FILETYPES = [".png", ".jpg", ".gif", ".jpeg", ".bmp"] # edit this list to add files you think stb_image should be able to load
+ACCEPTED_FILETYPES = [".png", ".jpg", ".jpeg", ".bmp"] # remove gif
 
 # TODO: make this work on more than just Linux
 for f in files:
