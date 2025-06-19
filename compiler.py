@@ -1,8 +1,9 @@
 import json
 import argparse as ag
 from os import listdir
-from os.path import join, exists, getsize, isfile
+from os.path import join, exists, getsize, isfile, isdir
 from math import floor
+import subprocess
 
 #------------------------------------------------------------------------------
 # argument parsing
@@ -96,7 +97,7 @@ data = wrzLoadData()
 # compress files if -c flag is passed
 
 if compress == True:
-    if os.path.isdir(f"{source_folder}-compressed/"): # remove all previously compressed files (easier than checking which ones are already)
+    if isdir(f"{source_folder}-compressed/"): # remove all previously compressed files (easier than checking which ones are already)
         subprocess.call(["rm", "-rf", f"{source_folder}-compressed"])
     subprocess.call(["python3", "cruncher.py", source_folder]) # call the compressor script TODO: make this an imported module?
     files = [f for f in listdir(f"{source_folder}-compressed") if isfile(join(f"{source_folder}-compressed", f))]
