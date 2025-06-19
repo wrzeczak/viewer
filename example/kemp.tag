@@ -1,2 +1,0 @@
-bobjack.bmp
-jackjoanne.bmp
